@@ -1,5 +1,6 @@
 package com.APISpringBoot.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -10,8 +11,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_payment")
-public class OrderPaymentModel {
-
+public class OrderPaymentModel implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
