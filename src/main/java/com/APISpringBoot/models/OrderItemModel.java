@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import com.APISpringBoot.models.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,11 +16,14 @@ public class OrderItemModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private OrderItemPK id;
+	private OrderItemPK id = new OrderItemPK();
 	private Integer quantity;
 	private Double price;
-
+	
+	public OrderItemModel() {
+		
+	}
+	
 	public OrderItemModel(OrderModel order, ProductModel product, Integer quantity, Double price) {
 		id.setOrder(order);
 		id.setProduct(product);
@@ -29,6 +31,8 @@ public class OrderItemModel implements Serializable {
 		this.price = price;
 	}
 
+	
+	@JsonIgnore
 	public OrderModel getOrder() {
 		return id.getOrder();
 	}
@@ -61,9 +65,13 @@ public class OrderItemModel implements Serializable {
 		this.price = price;
 	}
 
+	public double getsubTotal() {
+		return quantity * price;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, price, quantity);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -75,11 +83,9 @@ public class OrderItemModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		OrderItemModel other = (OrderItemModel) obj;
-		return Objects.equals(id, other.id) && Objects.equals(price, other.price)
-				&& Objects.equals(quantity, other.quantity);
+		return Objects.equals(id, other.id);
 	}
-
-	public double subTotal() {
-		return quantity * price;
-	}
+	
+	
+	
 }

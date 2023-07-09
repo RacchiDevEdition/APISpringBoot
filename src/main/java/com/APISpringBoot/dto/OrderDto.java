@@ -1,11 +1,12 @@
 package com.APISpringBoot.dto;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.APISpringBoot.models.OrderModel;
-import com.APISpringBoot.models.OrderPaymentModel;
-import com.APISpringBoot.models.ProductModel;
+import com.APISpringBoot.models.PaymentModel;
 import com.APISpringBoot.models.UserModel;
 import com.APISpringBoot.models.enums.OrderStatus;
 
@@ -16,16 +17,19 @@ public class OrderDto {
 	private Instant moment;
 	private OrderStatus orderStatus;
 	private UserModel client;
-	private ProductModel items;
-	private OrderPaymentModel payment;
+	private Set<OrderItemDto> items = new HashSet<>();
+	private PaymentModel payment;
 
 	public OrderDto(OrderModel order) {
 		this.id = order.getId();
 		this.moment = order.getMoment();
 		this.orderStatus = order.getOrderStatus();
 		this.client = order.getClient();
-		this.items = order.getItems();
 		this.payment = order.getPayment();
+	}
+	
+	public OrderDto() {
+		
 	}
 
 	public OrderModel getOrder() {
@@ -68,19 +72,17 @@ public class OrderDto {
 		this.client = client;
 	}
 
-	public ProductModel getItems() {
+	public Set<OrderItemDto	> getItems() {
 		return items;
 	}
 
-	public void setItems(ProductModel items) {
-		this.items = items;
-	}
+	
 
-	public OrderPaymentModel getPayment() {
+	public PaymentModel getPayment() {
 		return payment;
 	}
 
-	public void setPayment(OrderPaymentModel payment) {
+	public void setPayment(PaymentModel payment) {
 		this.payment = payment;
 	}
 

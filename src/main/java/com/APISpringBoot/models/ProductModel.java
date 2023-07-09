@@ -1,12 +1,18 @@
 package com.APISpringBoot.models;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,19 +26,22 @@ public class ProductModel implements Serializable {
 	private String description;
 	private Double price;
 	private String imgUrl;
-	private OrderModel orders;
-	private CategoryModel categories;
+	
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItemModel> items = new HashSet<>(); 
+	
+	@ManyToMany
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"),
+	inverseJoinColumns = @JoinColumn(name = "category_id"))
+	private Set<CategoryModel> categories = new HashSet<>();
 
-	public ProductModel(Long id, String name, String description, Double price, String imgUrl, OrderModel orders,
-			CategoryModel categories) {
+	public ProductModel(Long id, String name, String description, Double price, String imgUrl) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
-		this.orders = orders;
-		this.categories = categories;
 	}
 
 	public ProductModel() {
@@ -59,17 +68,17 @@ public class ProductModel implements Serializable {
 		return imgUrl;
 	}
 
-	public OrderModel getOrders() {
-		return orders;
+	public Set<OrderItemModel> getOrders() {
+		return items;
 	}
 
-	public CategoryModel getCategories() {
+	public Set<CategoryModel> getCategories() {
 		return categories;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(categories, description, id, imgUrl, name, orders, price);
+		return Objects.hash(categories, description, id, imgUrl, name, items, price);
 	}
 
 	@Override
@@ -83,14 +92,14 @@ public class ProductModel implements Serializable {
 		ProductModel other = (ProductModel) obj;
 		return Objects.equals(categories, other.categories) && Objects.equals(description, other.description)
 				&& Objects.equals(id, other.id) && Objects.equals(imgUrl, other.imgUrl)
-				&& Objects.equals(name, other.name) && Objects.equals(orders, other.orders)
+				&& Objects.equals(name, other.name) && Objects.equals(items, other.items)
 				&& Objects.equals(price, other.price);
 	}
 
 	@Override
 	public String toString() {
 		return "ProductModel [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
-				+ ", imgUrl=" + imgUrl + ", orders=" + orders + ", categories=" + categories + "]";
+				+ ", imgUrl=" + imgUrl + ", orders=" + items + ", categories=" + categories + "]";
 	}
 
 }

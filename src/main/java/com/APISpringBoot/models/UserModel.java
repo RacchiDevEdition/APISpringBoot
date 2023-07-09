@@ -28,18 +28,17 @@ public class UserModel implements Serializable {
 	private String email;
 	private String phone;
 	private String password;
-	@JsonIgnore
+	@JsonIgnore	
 	@OneToMany(mappedBy = "client")
 	private List<OrderModel>orders = new ArrayList<>();
 
-	public UserModel(Long id, String name, String email, String phone, String password, List<OrderModel> orders) {
+	public UserModel(Long id, String name, String email, String phone, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.password = password;
-		this.orders = orders;
 	}
 	
 	public UserModel(UserDto user) {
